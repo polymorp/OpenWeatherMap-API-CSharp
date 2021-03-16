@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+using System;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -20,6 +21,8 @@ namespace OpenWeatherAPI
 		public int ID { get; }
 		public string Name { get; }
 		public int Cod { get; }
+		public int Timezone { get; }
+		public DateTime Dt { get; }
 
 		public Query(string apiKey, string queryStr)
 		{
@@ -47,6 +50,8 @@ namespace OpenWeatherAPI
 				ID = int.Parse(jsonData.SelectToken("id").ToString(), CultureInfo.InvariantCulture);
 				Name = jsonData.SelectToken("name").ToString();
 				Cod = int.Parse(jsonData.SelectToken("cod").ToString(), CultureInfo.InvariantCulture);
+				Dt = Helper.convertUnixToDateTime(double.Parse(jsonData.SelectToken("dt").ToString(), CultureInfo.InvariantCulture));
+
 			}
 			else
 			{

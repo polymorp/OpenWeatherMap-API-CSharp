@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 
 namespace OpenWeatherAPI
@@ -26,11 +26,31 @@ namespace OpenWeatherAPI
 			Unknown
 		}
 
+		public enum BeaufortWindEnum
+		{
+			Calm = 0,
+			LightAir = 1,
+			LightBreeze = 2,
+			GentleBreeze = 3,
+			ModerateBreeze = 4,
+			FreshBreeze = 5,
+			StrongBreeze = 6,
+			HighWind = 7,
+			Gale = 8,
+			StrongSevereGale = 9,
+			Storm = 10,
+			ViolentStorm = 11,
+			HurricaneForce = 12,
+			Unknown = 13
+		}
+
 		public double SpeedMetersPerSecond { get; }
 
 		public double SpeedFeetPerSecond { get; }
 
 		public DirectionEnum Direction { get; }
+
+		public BeaufortWindEnum WindSpeed { get; }
 
 		public double Degree { get; }
 
@@ -46,6 +66,9 @@ namespace OpenWeatherAPI
 			SpeedFeetPerSecond = SpeedMetersPerSecond * 3.28084;
 			Degree = double.Parse(windData.SelectToken("deg").ToString(), CultureInfo.InvariantCulture);
 			Direction = assignDirection(Degree);
+
+			WindSpeed = assignWindspeed(SpeedMetersPerSecond);
+
 			if (windData.SelectToken("gust") != null)
 				Gust = double.Parse(windData.SelectToken("gust").ToString(), CultureInfo.InvariantCulture);
 		}
@@ -128,6 +151,37 @@ namespace OpenWeatherAPI
 			if (fB(degree, 326.25, 348.75))
 				return DirectionEnum.North_North_West;
 			return DirectionEnum.Unknown;
+		}
+
+		private BeaufortWindEnum assignWindspeed(double WindSpeed)
+		{
+			if (fB(WindSpeed, 0, 0.5))
+				return BeaufortWindEnum.Calm;
+			if (fB(WindSpeed, 0.5, 1.5))
+				return BeaufortWindEnum.LightAir;
+			if (fB(WindSpeed, 1.5, 3.3))
+				return BeaufortWindEnum.LightBreeze;
+			if (fB(WindSpeed, 3.3, 5.5))
+				return BeaufortWindEnum.GentleBreeze;
+			if (fB(WindSpeed, 5.5, 7.9))
+				return BeaufortWindEnum.ModerateBreeze;
+			if (fB(WindSpeed, 7.9, 10.7))
+				return BeaufortWindEnum.FreshBreeze;
+			if (fB(WindSpeed, 10.7, 13.8))
+				return BeaufortWindEnum.StrongBreeze;
+			if (fB(WindSpeed, 13.8, 17.1))
+				return BeaufortWindEnum.HighWind;
+			if (fB(WindSpeed, 17.1, 20.7))
+				return BeaufortWindEnum.Gale;
+			if (fB(WindSpeed, 20.7, 24.4))
+				return BeaufortWindEnum.StrongSevereGale;
+			if (fB(WindSpeed, 24.4, 28.4))
+				return BeaufortWindEnum.Storm;
+			if (fB(WindSpeed, 28.4, 32.6))
+				return BeaufortWindEnum.ViolentStorm;
+			if (fB(WindSpeed, 32.6, 100))
+				return BeaufortWindEnum.HurricaneForce;
+			return BeaufortWindEnum.Unknown;
 		}
 
 		//fB = fallsBetween

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace OpenWeatherAPI
 {
@@ -14,19 +14,26 @@ namespace OpenWeatherAPI
 		public double KelvinMinimum { get; }
 		public double KelvinMaximum { get; }
 
-		public TemperatureObj(double temp, double min, double max)
+		public double CelsiusFeelslike { get; }
+		public double FahrenheitFeelslike { get; }
+		public double KelvinFeelslike { get; }
+
+		public TemperatureObj(double temp, double min, double max, double feelslike)
 		{
 			KelvinCurrent = temp;
 			KelvinMaximum = max;
 			KelvinMinimum = min;
+			KelvinFeelslike = feelslike;
 
 			CelsiusCurrent = convertToCelsius(KelvinCurrent);
 			CelsiusMaximum = convertToCelsius(KelvinMaximum);
 			CelsiusMinimum = convertToCelsius(KelvinMinimum);
+			CelsiusFeelslike = convertToCelsius(KelvinFeelslike);
 
 			FahrenheitCurrent = convertToFahrenheit(CelsiusCurrent);
 			FahrenheitMaximum = convertToFahrenheit(CelsiusMaximum);
 			FahrenheitMinimum = convertToFahrenheit(CelsiusMinimum);
+			FahrenheitFeelslike = convertToFahrenheit(KelvinFeelslike);
 		}
 
 		private double convertToFahrenheit(double celsius)
