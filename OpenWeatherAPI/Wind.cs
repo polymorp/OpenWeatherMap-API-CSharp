@@ -56,6 +56,15 @@ namespace OpenWeatherAPI
 
 		public double Gust { get; }
 
+		public string DirectionInitials
+		{
+			get
+			{
+				return DirectionEnumToInitals(Direction);
+			}
+
+		}
+
 		public Wind(JToken windData)
 		{
 			if (windData is null)
@@ -109,6 +118,49 @@ namespace OpenWeatherAPI
 					return "West North-West";
 				case DirectionEnum.West_South_West:
 					return "West South-West";
+				case DirectionEnum.Unknown:
+					return "Unknown";
+				default:
+					return "Unknown";
+			}
+		}
+
+		public static string DirectionEnumToInitals(DirectionEnum dir)
+		{
+			switch (dir)
+			{
+				case DirectionEnum.East:
+					return "E";
+				case DirectionEnum.East_North_East:
+					return "ENE";
+				case DirectionEnum.East_South_East:
+					return "ESE";
+				case DirectionEnum.North:
+					return "N";
+				case DirectionEnum.North_East:
+					return "NE";
+				case DirectionEnum.North_North_East:
+					return "NNE";
+				case DirectionEnum.North_North_West:
+					return "NNW";
+				case DirectionEnum.North_West:
+					return "NW";
+				case DirectionEnum.South:
+					return "S";
+				case DirectionEnum.South_East:
+					return "SE";
+				case DirectionEnum.South_South_East:
+					return "SSE";
+				case DirectionEnum.South_South_West:
+					return "SSE";
+				case DirectionEnum.South_West:
+					return "SW";
+				case DirectionEnum.West:
+					return "W";
+				case DirectionEnum.West_North_West:
+					return "WNW";
+				case DirectionEnum.West_South_West:
+					return "WSW";
 				case DirectionEnum.Unknown:
 					return "Unknown";
 				default:
