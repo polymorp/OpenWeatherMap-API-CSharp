@@ -6,11 +6,11 @@ using System.Net;
 
 namespace OpenWeatherAPI
 {
-	public class Query
+	public class QueryResponse
 	{
 		public bool ValidRequest { get; }
-		public Coord Coord { get; }
-		public List<Weather> Weathers { get; } = new List<Weather>();
+		public Coordinates Coordinates { get; }
+		public List<Weather> WeatherList { get; } = new List<Weather>();
 		public string Base { get; }
 		public Main Main { get; }
 		public double Visibility { get; }
@@ -25,32 +25,15 @@ namespace OpenWeatherAPI
 		public int Timezone { get; }
 		public DateTime Dt { get; }
 
-		public Query(string apiKey, string queryStr)
+		public QueryResponse(string jsonResponse)
 		{
-			JObject jsonData = new JObject();
-			using (var client = new System.Net.WebClient())
-			{
-				try
-				{
-					var response = client.DownloadString(
-						$"http://api.openweathermap.org/data/2.5/weather?appid={apiKey}&q={queryStr}");
-
-					jsonData = JObject.Parse(response);
-				}
-				catch (WebException e)
-				{
-					Console.WriteLine(e);
-					ValidRequest = false; 
-				}
-				
-			}
-
-			if (ValidRequest  && jsonData.SelectToken("cod").ToString() == "200")
+			var jsonData = JObject.Parse(jsonResponse);
+			if (jsonData.SelectToken("cod").ToString() == "200")
 			{
 				ValidRequest = true;
-				Coord = new Coord(jsonData.SelectToken("coord"));
+				Coordinates = new Coordinates(jsonData.SelectToken("coord"));
 				foreach (JToken weather in jsonData.SelectToken("weather"))
-					Weathers.Add(new Weather(weather));
+					WeatherList.Add(new Weather(weather));
 				Base = jsonData.SelectToken("base").ToString();
 				Main = new Main(jsonData.SelectToken("main"));
 				if (jsonData.SelectToken("visibility") != null)

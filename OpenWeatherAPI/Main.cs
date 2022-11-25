@@ -9,7 +9,7 @@ namespace OpenWeatherAPI
 
 		public double Pressure { get; }
 
-		public double Humdity { get; }
+		public double Humidity { get; }
 
 		public double SeaLevelAtm { get; }
 
@@ -39,7 +39,7 @@ namespace OpenWeatherAPI
 			);
 
 			Pressure = double.Parse(mainData.SelectToken("pressure").ToString(), CultureInfo.InvariantCulture);
-			Humdity = double.Parse(mainData.SelectToken("humidity").ToString(), CultureInfo.InvariantCulture);
+			Humidity = double.Parse(mainData.SelectToken("humidity").ToString(), CultureInfo.InvariantCulture);
 			if (mainData.SelectToken("sea_level") != null)
 				SeaLevelAtm = double.Parse(mainData.SelectToken("sea_level").ToString(), CultureInfo.InvariantCulture);
 			if (mainData.SelectToken("grnd_level") != null)

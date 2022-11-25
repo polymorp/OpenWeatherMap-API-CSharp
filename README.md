@@ -5,7 +5,7 @@ This library takes what openweathermap api returns in JSON, and converts it to C
 ### Returned Data
 - Clouds
   * All - Level of cloudiness (percentage of cloud cover?)
-- Coords
+- Coordinates
   * Longitude - Query location longitude
   * Latitude - Query location latitude
 - Main
@@ -48,19 +48,16 @@ This library takes what openweathermap api returns in JSON, and converts it to C
 - directionEnumToString(DirectionEnum dir) - Returns string value of wind direction on the basis of passed in DirectionEnum
 
 ### Installing
-1. Clone this code
-   - `git clone https://github.com/swiftyspiffy/OpenWeatherMap-API-CSharp.git`
-2. Open the code in VS
-3. Build the code base
-4. In your project that's using this code, reference the built DLL from the previous step:
-   - Project dropdown -> Add Reference -> Search for the created DLL(s) file.
-   - Generally, the path is something like: `/OpenWeatherMap-API-CSharp/bin/Debug/OpenWeatherAPI.dll`
-   - You may also need to reference the `Newtonsoft.Json.dll` if you aren't already using this library.
+Install the NuGet package https://www.nuget.org/packages/OpenWeatherAPI/
 
 ### Example Usage
 ```csharp
-OpenWeatherAPI.OpenWeatherAPI openWeatherAPI = new OpenWeatherAPI.OpenWeatherAPI("my open weather api key");
-OpenWeatherAPI.Query query = openWeatherAPI.query("city/location query");
+var openWeatherAPI = new OpenWeatherAPI.OpenWeatherApiClient("my open weather api key");
+// Use async version wherever possible
+var query = await openWeatherAPI.QueryAsync("city/location query");
+// or non-async version if needed for legacy code
+var query = openWeatherAPI.Query("city/location query");
+
 Console.WriteLine(string.Format("The temperature in {0}, {1} is currently {2} °F", query.Name,query.Sys.Country, query.Main.Temperature.FahrenheitCurrent));
 ```
 

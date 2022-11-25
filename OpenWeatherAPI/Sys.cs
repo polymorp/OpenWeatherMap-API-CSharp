@@ -6,8 +6,6 @@ namespace OpenWeatherAPI
 {
 	public class Sys
 	{
-		private readonly DateTime sunset;
-
 		public int Type { get; }
 
 		public int ID { get; }
@@ -18,7 +16,7 @@ namespace OpenWeatherAPI
 
 		public DateTime Sunrise { get; }
 
-		public DateTime Sunset => sunset;
+		public DateTime Sunset { get; }
 
 		public Sys(JToken sysData)
 		{
@@ -33,10 +31,14 @@ namespace OpenWeatherAPI
 			if (sysData.SelectToken("message") != null)
 				Message = double.Parse(sysData.SelectToken("message").ToString(), CultureInfo.InvariantCulture);
 			Country = sysData.SelectToken("country").ToString();
-			Sunrise = Helper.convertUnixToDateTime(double.Parse(sysData.SelectToken("sunrise").ToString(), CultureInfo.InvariantCulture));
-			sunset = Helper.convertUnixToDateTime(double.Parse(sysData.SelectToken("sunset").ToString(), CultureInfo.InvariantCulture));
+			Sunrise = ConvertUnixToDateTime(double.Parse(sysData.SelectToken("sunrise").ToString(), CultureInfo.InvariantCulture));
+			Sunset = ConvertUnixToDateTime(double.Parse(sysData.SelectToken("sunset").ToString(), CultureInfo.InvariantCulture));
 		}
 
-		
+		private static DateTime ConvertUnixToDateTime(double unixTime)
+		{
+			DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			return dt.AddSeconds(unixTime).ToLocalTime();
+		}
 	}
 }
