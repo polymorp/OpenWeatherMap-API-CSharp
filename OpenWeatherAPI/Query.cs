@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 
 namespace OpenWeatherAPI
 {
@@ -26,11 +27,25 @@ namespace OpenWeatherAPI
 
 		public Query(string apiKey, string queryStr)
 		{
-			JObject jsonData;
+			JObject jsonData = new JObject();
 			using (var client = new System.Net.WebClient())
-				jsonData = JObject.Parse(client.DownloadString($"http://api.openweathermap.org/data/2.5/weather?appid={apiKey}&q={queryStr}"));
+			{
+				try
+				{
+					var response = client.DownloadString(
+						$"http://api.openweathermap.org/data/2.5/weather?appid={apiKey}&q={queryStr}");
 
-			if (jsonData.SelectToken("cod").ToString() == "200")
+					jsonData = JObject.Parse(response);
+				}
+				catch (WebException e)
+				{
+					Console.WriteLine(e);
+					ValidRequest = false; 
+				}
+				
+			}
+
+			if (ValidRequest  && jsonData.SelectToken("cod").ToString() == "200")
 			{
 				ValidRequest = true;
 				Coord = new Coord(jsonData.SelectToken("coord"));

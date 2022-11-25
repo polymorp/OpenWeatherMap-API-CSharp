@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace OpenWeatherAPI
 {
+	 	
 	internal static class Helper
 	{
 		internal static DateTime convertUnixToDateTime(double unixTime)
