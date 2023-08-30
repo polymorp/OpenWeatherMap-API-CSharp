@@ -46,6 +46,9 @@ This library takes what openweathermap api returns in JSON, and converts it to C
 - Additional Main values:  By default the openweathermap API returns just Kelvin temperatures.  I have created properties in the Main class that returns equivalent Celsius and Fahrenheight
 - DirectionEnum - Added direction enum in Wind class that is set in constructor on the basis of degree double
 - directionEnumToString(DirectionEnum dir) - Returns string value of wind direction on the basis of passed in DirectionEnum
+- DirectionEnumToInitals - Returns Initials for directions 
+- WindSpeed - Windspeed on Beaufort scale 
+
 
 ### Installing
 Install the NuGet package https://www.nuget.org/packages/OpenWeatherAPI/

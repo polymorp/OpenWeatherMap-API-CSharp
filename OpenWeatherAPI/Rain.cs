@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 
 namespace OpenWeatherAPI
@@ -12,8 +12,13 @@ namespace OpenWeatherAPI
 
 			if (rainData.SelectToken("3h") != null)
 				H3 = double.Parse(rainData.SelectToken("3h").ToString(), CultureInfo.InvariantCulture);
+
+			if (rainData.SelectToken("1h") != null)
+				H1 = double.Parse(rainData.SelectToken("1h").ToString(), CultureInfo.InvariantCulture);
 		}
 
 		public double H3 { get; }
+
+		public double H1 { get; }
 	}
 }
