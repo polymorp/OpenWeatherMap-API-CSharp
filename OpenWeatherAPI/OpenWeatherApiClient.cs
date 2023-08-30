@@ -8,22 +8,45 @@ namespace OpenWeatherAPI
 	{
 		private readonly string _apiKey;
 		private readonly HttpClient _httpClient;
-		public OpenWeatherApiClient(string apiKey)
+		private readonly bool _useHttps;
+		public OpenWeatherApiClient(string apiKey, bool useHttps = false)
 		{
 			_apiKey = apiKey;
 			_httpClient = new HttpClient();
+			_useHttps = useHttps;
 		}
 
-		private Uri GenerateRequestUrl(string queryString) => new Uri($"http://api.openweathermap.org/data/2.5/weather?appid={_apiKey}&q={queryString}");
+		private async Task<Uri> GenerateRequestUrl(string queryString)
+		{
+			var geo = await Geolocate(queryString).ConfigureAwait(false);
+
+			string scheme = "http";
+			if (_useHttps)
+				scheme = "https";
+			return new Uri($"{scheme}://api.openweathermap.org/data/2.5/weather?appid={_apiKey}&lat={geo.Lat}&lon={geo.Lon}");
+		}
+
+		public async Task<GeoResponse> Geolocate(string queryString)
+		{
+			string scheme = "http";
+			if (_useHttps)
+				scheme = "https";
+
+			var jsonResponse = await _httpClient
+				.GetStringAsync(
+					new Uri($"{scheme}://api.openweathermap.org/geo/1.0/direct?q={queryString}&limit={1}&appid={_apiKey}"))
+				.ConfigureAwait(false);
+			return new GeoResponse(jsonResponse);
+		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="queryString"></param>
 		/// <returns>Returns null if the query is invalid.</returns>
 		public async Task<QueryResponse> QueryAsync(string queryString)
 		{
-			var jsonResponse = await _httpClient.GetStringAsync(GenerateRequestUrl(queryString)).ConfigureAwait(false);
+			var jsonResponse = await _httpClient.GetStringAsync(GenerateRequestUrl(queryString).Result).ConfigureAwait(false);
 			var query = new QueryResponse(jsonResponse);
 			return query.ValidRequest ? query : null;
 		}

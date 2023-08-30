@@ -38,12 +38,13 @@ namespace OpenWeatherAPI
 				feelslike
 			);
 
-			Pressure = double.Parse(mainData.SelectToken("pressure").ToString(), CultureInfo.InvariantCulture);
-			Humidity = double.Parse(mainData.SelectToken("humidity").ToString(), CultureInfo.InvariantCulture);
+
+			Pressure = double.Parse(mainData.SelectToken("pressure").ToString(), CultureInfo.CurrentCulture);
+			Humidity = double.Parse(mainData.SelectToken("humidity").ToString(), CultureInfo.CurrentCulture);
 			if (mainData.SelectToken("sea_level") != null)
-				SeaLevelAtm = double.Parse(mainData.SelectToken("sea_level").ToString(), CultureInfo.InvariantCulture);
+				SeaLevelAtm = double.Parse(mainData.SelectToken("sea_level").ToString(), CultureInfo.CurrentCulture);
 			if (mainData.SelectToken("grnd_level") != null)
-				GroundLevelAtm = double.Parse(mainData.SelectToken("grnd_level").ToString(), CultureInfo.InvariantCulture);
+				GroundLevelAtm = double.Parse(mainData.SelectToken("grnd_level").ToString(), CultureInfo.CurrentCulture);
 		}
 	}
 }

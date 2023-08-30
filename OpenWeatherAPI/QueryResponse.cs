@@ -48,6 +48,7 @@ namespace OpenWeatherAPI
 				ID = int.Parse(jsonData.SelectToken("id").ToString(), CultureInfo.InvariantCulture);
 				Name = jsonData.SelectToken("name").ToString();
 				Cod = int.Parse(jsonData.SelectToken("cod").ToString(), CultureInfo.InvariantCulture);
+				Timezone = int.Parse(jsonData.SelectToken("timezone").ToString(), CultureInfo.InvariantCulture);
 				Dt = Helper.convertUnixToDateTime(double.Parse(jsonData.SelectToken("dt").ToString(), CultureInfo.InvariantCulture));
 
 			}
